@@ -1,14 +1,16 @@
+"""Test_main.py: Test GrabLib."""
+
 import pytest
-import asyncio
-import json
+import requests
 
 import grablib
-import requests
 
 pytestmark = pytest.mark.asyncio
 
+
 class TestGrabLib:
     """Test the GrabLib module."""
+
     async def test_get(self, mocker):
         """Test retrieval of URL."""
         mocker.patch("grablib.main.requests.get")
@@ -25,13 +27,13 @@ class TestGrabLib:
                     "df3f619804a92fdb4057192dc43dd748"
                     "ea778adc52bc498ce80524c014b81119"
                 ),
-                "data": fake_image_data
+                "data": fake_image_data,
             }
         grablib.main.requests.get.assert_called_with(
             "http://fake.com/image.jpg"
         )
         assert actual == expected
-    
+
     async def test_get_error(self, mocker):
         """Test error handling with URL retrieval."""
         mocker.patch("grablib.main.requests.get")
@@ -48,7 +50,7 @@ class TestGrabLib:
                 "data": b"Error: 404",
             }
         assert actual == expected
-    
+
     async def test_get_exceptions(self, mocker):
         """Test exception handling with URL retrieval."""
         mocker.patch("grablib.main.requests.get")
@@ -63,11 +65,11 @@ class TestGrabLib:
             b"Exception: SSLError",
         ]
         with grablib.GrabLib() as grabber:
-            for index in range(len(response_messages)):
+            for response_message in response_messages:
                 actual = await grabber.get("http://fake.com/image.jpg")
                 expected = {
                     "url": "http://fake.com/image.jpg",
                     "sha256": "0" * 64,
-                    "data": response_messages[index],
+                    "data": response_message,
                 }
                 assert actual == expected
