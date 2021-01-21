@@ -10,7 +10,7 @@ pytestmark = pytest.mark.asyncio
 
 class TestGrabLib:
     """Test the GrabLib module."""
-    fake_url = ""
+    fake_url = "https://fake.url/filename.ext"
 
     async def test_get(self, mocker):
         """Test retrieval of URL."""

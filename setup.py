@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="redeye-grablib",
-    version="0.0.1",
+    version="0.0.2",
     author="CMSteffen",
     author_email="cmsteffen@haxys.net",
     description="A library for retrieving files from HTTP servers.",
