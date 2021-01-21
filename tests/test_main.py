@@ -2,22 +2,22 @@ import pytest
 import asyncio
 import json
 
-import imgrab
+import grablib
 import requests
 
 pytestmark = pytest.mark.asyncio
 
-class TestImGrab:
-    """Test the ImGrab module."""
+class TestGrabLib:
+    """Test the GrabLib module."""
     async def test_get(self, mocker):
         """Test retrieval of URL."""
-        mocker.patch("imgrab.main.requests.get")
+        mocker.patch("grablib.main.requests.get")
         fake_image_data = b"\x00\x00\x00\x00"
         response = mocker.MagicMock()
         response.status_code = 200
         response.content = fake_image_data
-        imgrab.main.requests.get.return_value = response
-        with imgrab.ImGrab() as grabber:
+        grablib.main.requests.get.return_value = response
+        with grablib.GrabLib() as grabber:
             actual = await grabber.get("http://fake.com/image.jpg")
             expected = {
                 "url": "http://fake.com/image.jpg",
@@ -27,20 +27,20 @@ class TestImGrab:
                 ),
                 "data": fake_image_data
             }
-        imgrab.main.requests.get.assert_called_with(
+        grablib.main.requests.get.assert_called_with(
             "http://fake.com/image.jpg"
         )
         assert actual == expected
     
     async def test_get_error(self, mocker):
         """Test error handling with URL retrieval."""
-        mocker.patch("imgrab.main.requests.get")
+        mocker.patch("grablib.main.requests.get")
         error_msg = b"404 Error: File not found."
         response = mocker.MagicMock()
         response.status_code = 404
         response.content = error_msg
-        imgrab.main.requests.get.return_value = response
-        with imgrab.ImGrab() as grabber:
+        grablib.main.requests.get.return_value = response
+        with grablib.GrabLib() as grabber:
             actual = await grabber.get("http://fake.com/image.jpg")
             expected = {
                 "url": "http://fake.com/image.jpg",
@@ -51,8 +51,8 @@ class TestImGrab:
     
     async def test_get_exceptions(self, mocker):
         """Test exception handling with URL retrieval."""
-        mocker.patch("imgrab.main.requests.get")
-        imgrab.main.requests.get.side_effect = [
+        mocker.patch("grablib.main.requests.get")
+        grablib.main.requests.get.side_effect = [
             requests.exceptions.ConnectionError,
             requests.exceptions.ProxyError,
             requests.exceptions.SSLError,
@@ -62,7 +62,7 @@ class TestImGrab:
             b"Exception: ProxyError",
             b"Exception: SSLError",
         ]
-        with imgrab.ImGrab() as grabber:
+        with grablib.GrabLib() as grabber:
             for index in range(len(response_messages)):
                 actual = await grabber.get("http://fake.com/image.jpg")
                 expected = {

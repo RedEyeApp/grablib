@@ -2,10 +2,10 @@ import asyncio
 import requests
 import hashlib
 
-class ImGrab:
+class GrabLib:
     """Image Grabber: Downloads images from specified URLs."""
     def __init__(self):
-        """Initialize ImGrab."""
+        """Initialize GrabLib."""
     
     def __enter__(self):
         """Simple constructor for 'with' usage."""
