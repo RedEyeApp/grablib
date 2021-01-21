@@ -6,3 +6,8 @@ venv
 
 # Python caches.
 __pycache__
+
+# Build directories.
+build
+dist
+*.egg-info
