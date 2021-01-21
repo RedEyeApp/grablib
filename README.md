@@ -2,6 +2,12 @@
 
 A library for retrieving files from HTTP servers.
 
+## Installation
+
+```
+pip install redeye-grablib
+```
+
 ## Usage
 
 ```
